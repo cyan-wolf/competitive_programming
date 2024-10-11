@@ -1,4 +1,6 @@
 
+# ACCEPTED
+
 def det_min_cost(nums):
     nums.sort()
     cost = 0

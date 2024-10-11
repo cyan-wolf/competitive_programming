@@ -1,4 +1,6 @@
 
+# ACCEPTED
+
 def calc_last_odd_nums(n):
     odd_seq = [1, 3, 5, 7, 9]
     sum_5 = sum(odd_seq)
