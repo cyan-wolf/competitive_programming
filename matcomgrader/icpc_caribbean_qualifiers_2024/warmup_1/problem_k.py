@@ -1,4 +1,6 @@
 
+# ACCEPTED
+
 def determine_max_stack_size(stk):
     max_size = 1
 

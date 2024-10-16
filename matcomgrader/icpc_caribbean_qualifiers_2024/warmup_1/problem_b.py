@@ -1,4 +1,6 @@
 
+# ACCEPTED
+
 def max_abs_diff(nums):
     total_max = 0
 

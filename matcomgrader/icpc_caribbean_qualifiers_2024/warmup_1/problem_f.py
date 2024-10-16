@@ -1,4 +1,6 @@
 
+# ACCEPTED
+
 def det_palindrome_len(s):
     letter_count = {}
 
