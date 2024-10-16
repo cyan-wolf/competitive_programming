@@ -1,5 +1,8 @@
 
+# ACCEPTED
+
 def max_consec_subset(nums):
+    nums = list(set(nums)) # remove duplicates
     nums.sort()
     max_streak = 0
     
@@ -11,6 +14,7 @@ def max_consec_subset(nums):
             num += 1
             if nums[j] == num:
                 streak += 1
+            
             else:
                 break
         
