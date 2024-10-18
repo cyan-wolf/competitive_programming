@@ -1,4 +1,6 @@
 
+# ACCEPTED
+
 def det_new_orientation(orientation, direction):
     wheel = ['N', 'W', 'S', 'E']
     wheel_pos = None
@@ -9,11 +11,10 @@ def det_new_orientation(orientation, direction):
 
     new_orientation = None
 
-    match direction:
-        case 'L':
-            new_orientation = wheel[(wheel_pos + 1) % len(wheel)]
-        case 'R':
-            new_orientation = wheel[(wheel_pos - 1) % len(wheel)]
+    if direction == 'L':
+        new_orientation = wheel[(wheel_pos + 1) % len(wheel)]
+    else:
+        new_orientation = wheel[(wheel_pos - 1) % len(wheel)]
 
     return new_orientation
 
@@ -22,40 +23,37 @@ def det_commands_to_get_back(pos, orientation):
         return 0
     
     elif pos[1] == 0:
-        match orientation:
-            case 'N', 'S':
-                return 2
+        if orientation in {'N', 'S'}:
+            return 2
             
-            case 'W':
-                return 3 if pos[0] < 0 else 1
+        elif orientation == 'W':
+            return 3 if pos[0] < 0 else 1
             
-            case 'E':
-                return 3 if pos[0] > 0 else 1
+        else:
+            return 3 if pos[0] > 0 else 1
             
     elif pos[0] == 0:
-        match orientation:
-            case 'W', 'E':
-                return 2
+        if orientation in {'W', 'E'}:
+            return 2
             
-            case 'N':
-                return 3 if pos[1] > 0 else 1
+        elif orientation == 'N':
+            return 3 if pos[1] > 0 else 1
             
-            case 'S':
-                return 3 if pos[1] < 0 else 1
+        else:
+            return 3 if pos[1] < 0 else 1
             
     else:
-        match orientation:
-            case 'N':
-                return 3 if pos[1] < 0 else 4
+        if orientation == 'N':
+            return 3 if pos[1] < 0 else 4
 
-            case 'S':
-                return 3 if pos[1] > 0 else 4
+        elif orientation == 'S':
+            return 3 if pos[1] > 0 else 4
 
-            case 'W':
-                return 3 if pos[0] > 0 else 4
+        elif orientation == 'W':
+            return 3 if pos[0] > 0 else 4
 
-            case 'E':
-                return 3 if pos[0] < 0 else 4 
+        else:
+            return 3 if pos[0] < 0 else 4 
 
 def det_shortest_path_back(commands):
     orientation = 'N'
@@ -65,18 +63,17 @@ def det_shortest_path_back(commands):
         if len(c) == 2:
             ds = int(c[1])
 
-            match orientation:
-                case 'N':
-                    pos[1] += ds
+            if orientation == 'N':
+                pos[1] += ds
 
-                case 'S':
-                    pos[1] -= ds
+            elif orientation == 'S':
+                pos[1] -= ds
 
-                case 'W':
-                    pos[0] -= ds
+            elif orientation == 'W':
+                pos[0] -= ds
 
-                case 'E':
-                    pos[0] += ds
+            else:
+                pos[0] += ds
         else:
             direction = c[0]
             orientation = det_new_orientation(orientation, direction)
