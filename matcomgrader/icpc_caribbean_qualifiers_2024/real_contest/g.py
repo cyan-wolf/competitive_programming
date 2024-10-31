@@ -1,5 +1,6 @@
 
-# FAILED: "maximum recursion depth reached"
+# FAILED: "memory limit exceeded"
+# NOTE: This problem might not be doable in Python given the limits.
 
 def build_tree(edges):
     tree = {}
@@ -15,7 +16,16 @@ def build_tree(edges):
 def gen_path_lists_from_root(tree, root):
     paths = {}
 
-    def dfs(tree, node, path):
+    # Iterative DFS: 
+
+    # Simulating call stack.
+    stk = [(root, set())] 
+
+    while len(stk) > 0:
+        # Get the node to be processes along with 
+        # the current path.
+        node, path = stk.pop()
+
         # Make a copy of the current path.
         path = set(path)
         # Add the current node to this path.
@@ -31,9 +41,9 @@ def gen_path_lists_from_root(tree, root):
                 visited = nbr in paths
 
                 if not visited:
-                    dfs(tree, nbr, path)
-
-    dfs(tree, root, set())
+                    # Stack the neighbor node along with the 
+                    # current path to be processed later.
+                    stk.append((nbr, path))
 
     return paths
 
@@ -59,6 +69,7 @@ if __name__ == "__main__":
     main()
 
 
+# Test inputs:
 """
 5 4 2
 2 3
