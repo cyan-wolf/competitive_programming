@@ -157,25 +157,24 @@ def print_chemical_sentence_format(letters, table1, table2):
         print("-- Could not be formed.")
         return
     
-    atomic_nums = [table1[symm][1] for symm in symbols]
-    proper_symbols = [table1[symm][0] for symm in symbols]
+    atomic_nums = [table1[symm] for symm in symbols]
+    proper_symbols = [symm.title() for symm in symbols]
 
     avg_num = round(sum(atomic_nums) / len(atomic_nums))
-    avg_elem_sym = table2[avg_num]
+    avg_elem_sym = table2[avg_num].title()
 
     print(" ".join(proper_symbols))
     print(f"Average Atomic Number: {avg_num} Element is: {avg_elem_sym}")
 
 def read_elements():
-    # table1: symbol -> (presentatble symbol, atomic number)
-    # table2: atomic number -> presentable symbol
+    # table1: symbol -> atomic number
+    # table2: atomic number -> symbol
     table1, table2 = {}, {}
     
     atomic_number = 1
 
     for symbol in ELEMENTS.split():
-        table1[symbol.lower()] = (symbol, atomic_number)
-        
+        table1[symbol.lower()] = atomic_number
         table2[atomic_number] = symbol
 
         atomic_number += 1 
