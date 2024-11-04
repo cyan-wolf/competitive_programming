@@ -1,9 +1,14 @@
 
+# FAILED
+
 class Node:
     def __init__(self, left, value, right):
         self.left = left
         self.value = value
         self.right = right
+
+    def __str__(self):
+        return f"Node({self.value}, {self.left}, {self.right})"
 
 def add_elem(bst, elem, letter_weight):
     if bst is None:
@@ -17,6 +22,17 @@ def add_elem(bst, elem, letter_weight):
             bst.right = add_elem(bst.right, elem, letter_weight)
 
         return bst
+    
+# This code does not work (?).
+def rotate_left(tree):
+    old_root = tree
+    new_root = tree.right
+    old_left = new_root.left
+
+    new_root.left = old_root
+    old_root.right = old_left
+
+    return new_root
 
 def to_tree(word):
     letter_weight = {}
@@ -26,13 +42,13 @@ def to_tree(word):
 
     letters = list(word)
 
-    # TODO: I need to rotate the tree.
-    root = max(letters, key=lambda c: letter_weight[c])
-    tree = add_elem(None, root, None)
-
+    tree = None
     for elem in letters:
-        if elem != root:
-            tree = add_elem(tree, elem, letter_weight)
+        tree = add_elem(tree, elem, letter_weight)
+
+    # Set the "heaviest" letter to root.
+    while tree.right != None:
+        tree = rotate_left(tree)
 
     return tree
 
