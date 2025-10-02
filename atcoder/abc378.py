@@ -60,7 +60,57 @@ def solution_c():
 
     print(" ".join(output))
 
+def solution_d():
+    def is_valid(grid, pos):
+        r, c = pos
+
+        if 0 <= r < len(grid) and 0 <= c < len(grid[0]) and grid[r][c] == '.':
+            return True
+        else:
+            return False
+
+    def get_neighbors(grid, pos):
+        r, c = pos
+
+        nbrs = [(r + 1, c), (r - 1, c), (r, c + 1), (r, c - 1)]
+        return (nbr for nbr in nbrs if is_valid(grid, nbr))
+
+    height, width, move_amt = [int(d) for d in input().split()]
+    grid = [list(input()) for _ in range(height)]
+
+    visited = [[False for _ in range(width)] for _ in range(height)]
+
+    possible_paths = {"result": 0}
+    
+    for r in range(height):
+        for c in range(width):
+            start = grid[r][c]
+
+            if start == '.':
+                # Perform DFS
+                def dfs(cur_r, cur_c, depth):
+                    visited[cur_r][cur_c] = True
+
+                    if depth == move_amt:
+                        possible_paths["result"] += 1
+                        return
+
+                    nbrs = get_neighbors(grid, (cur_r, cur_c))
+
+                    for nbr in nbrs:
+                        nr, nc = nbr
+
+                        if not visited[nr][nc]:
+                            dfs(nr, nc, depth + 1)
+
+                    visited[cur_r][cur_c] = False
+
+                dfs(r, c, 0)
+                    
+    print(possible_paths["result"])
+
 if __name__ == "__main__":
     #solution_a()
     #solution_b()
-    solution_c()
+    #solution_c()
+    solution_d()
