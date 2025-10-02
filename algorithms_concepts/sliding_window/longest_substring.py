@@ -34,14 +34,38 @@ def find_longest_substr_incorrect(s: str) -> str:
 
 
 def find_longest_substr(s: str) -> str:
-    # TODO
-    return ""
+    left = 0
+
+    left_len = (left, 0)
+    last_seen_map = {}
+
+    for right in range(len(s)):
+        curr = s[right]
+
+        # Contract.
+        # This contracts when the current character is within the window (at a position after or at `left`).
+        if curr in last_seen_map and last_seen_map[curr] >= left:
+            # Move `left` past where the other occurence of `curr` was in the window.
+            left = last_seen_map[curr] + 1
+
+        # Update state.
+        last_seen_map[curr] = right
+
+        # Update result.
+        curr_len = right - left + 1
+        old_len = left_len[1]
+
+        if curr_len > old_len:
+            left_len = (left, curr_len)
+    
+    start, length = left_len
+    return s[start:start+length]
 
 
 def main():
-    print(find_longest_substr_incorrect("aabc")) # abc
-    print(find_longest_substr_incorrect("bbbbb")) # b
-    print(find_longest_substr_incorrect("abcabcbb")) # abc
+    print(find_longest_substr("aabc")) # abc
+    print(find_longest_substr("bbbbb")) # b
+    print(find_longest_substr("abcabcbb")) # abc
 
 
 main()
