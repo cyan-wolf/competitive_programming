@@ -2,7 +2,24 @@
 Given a set of n items, where each item i has a weight w_i and a value v_i and a knapsack with a maximum weight capacity W.
 """
 
-def knapsack(weights: list[int], values: list[int], capacity: int) -> int:
+
+# O(capacity), capacity = # of columns of `dp`
+def determine_chosen_knapsack_items(dp: list[list[int]], weights: list[int]) -> set[int]:
+    chosen = set()
+    curr_capacity = len(dp[0]) - 1
+
+    for i in range(len(dp) -1, 0, -1):
+        # Item added at step #i was added.
+        if dp[i][curr_capacity] != dp[i - 1][curr_capacity]:
+            item_idx = i - 1
+            curr_capacity -= weights[item_idx]
+            chosen.add(item_idx)
+
+    return chosen
+
+
+# O(values * capacity)
+def knapsack(weights: list[int], values: list[int], capacity: int) -> tuple[int, set[int]]:
     item_amt = len(values)
     dp = [[0 for _ in range(capacity + 1)] for _ in range(item_amt + 1)]
     
@@ -26,7 +43,9 @@ def knapsack(weights: list[int], values: list[int], capacity: int) -> int:
                 # Pick the choice that leads to the maximum value.
                 dp[i][curr_capacity] = max(val_without_item, val_with_item)
     
-    return dp[item_amt][capacity]
+    chosen_items = determine_chosen_knapsack_items(dp, weights)
+
+    return dp[item_amt][capacity], chosen_items
 
 
 def main():
