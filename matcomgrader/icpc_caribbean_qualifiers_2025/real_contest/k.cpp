@@ -36,8 +36,6 @@ int main() {
                 int x, y, z;
                 cin >> x >> y >> z;
 
-                // cout << "adding..." << endl;
-
                 seen_entities++;
                 entities[seen_entities] = {x, y, z};
                 
@@ -50,8 +48,6 @@ int main() {
             else {
                 int id;
                 cin >> id;
-
-                // cout << "removing... " << id << endl;
 
                 auto entity = entities.at(id);
 
