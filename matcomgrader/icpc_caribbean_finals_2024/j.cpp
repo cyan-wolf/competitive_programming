@@ -5,12 +5,13 @@
     https://codeforces.com/gym/105505/problem/J
 */
 
-// Time Limit Exceeded (how?)
+// Accepted
 
 #include <iostream>
 #include <cmath>
 #include <vector>
 #include <algorithm>
+#include <tuple>
 #include <iomanip>
 
 using namespace std;
@@ -26,13 +27,13 @@ int main() {
     // <cmath> trig functions use radians
     double angle = angle_deg / 180.0 * acos(-1);
 
-    vector<pair<double, double>> shads(n);
+    vector<tuple<int, double>> shads(n);
 
     for (int i = 0; i < n; ++i) {
-        double pos, height;
+        int pos, height;
         cin >> pos >> height;
 
-        double s = height / tan(angle);
+        double s = (double)height / tan(angle);
 
         shads[i] = {pos, pos + s};
     }
@@ -40,30 +41,33 @@ int main() {
     // Sorts the shadows by their starting position.
     sort(shads.begin(), shads.end());
 
+    double epsilon = 1e-4;
+
     double total_length = 0;
 
-    double curr_min = shads[0].first;
-    double curr_max = shads[0].second;
+    double curr_min = get<0>(shads[0]);
+    double curr_max = get<1>(shads[0]);
 
     // Greedy algorithm for merging the shadows.
     // The max/min for the first shadow was already computed, so we start 
     // at the second element.
     for (int i = 1; i < n; ++i) {
-        auto new_shad = shads[i];
+        auto new_shad_min = get<0>(shads[i]);
+        auto new_shad_max = get<1>(shads[i]);
 
         // If the current max is less than the start of the new shadow, 
         // then there is a gap and we should save our length so far and 
         // reset the max/min.
-        if (curr_max < new_shad.first) {
+        if (curr_max + epsilon < new_shad_min) {
             total_length += curr_max - curr_min;
 
-            curr_min = new_shad.first;
-            curr_max = new_shad.second;
+            curr_min = new_shad_min;
+            curr_max = new_shad_max;
         }
         // The next shadow increases the size of the current 
         // patch, so we update the max.
-        else if (curr_max < new_shad.second) {
-            curr_max = new_shad.second;
+        else if (curr_max + epsilon < new_shad_max) {
+            curr_max = new_shad_max;
         }
     }
     // The previous loop doesn't save the last patch, so we add it here.
