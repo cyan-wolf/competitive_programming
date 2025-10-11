@@ -2,7 +2,10 @@
     Problem A - Append and Panic!
     https://scorelatam.naquadah.com.br/latam-2024/contest.pdf
     https://scorelatam.naquadah.com.br/latam-2024/Score.html
+    https://codeforces.com/gym/105505/problem/A
 */
+
+// Accepted
 
 #include <iostream>
 #include <string>
