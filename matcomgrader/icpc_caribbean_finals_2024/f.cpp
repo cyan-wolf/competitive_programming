@@ -5,20 +5,55 @@
     https://codeforces.com/gym/105505/problem/F
 */
 
+// Wrong Answer 
+
 #include <iostream>
-#include <vector>
+#include <string>
+#include <unordered_set>
+#include <cmath>
 
 using namespace std;
 
-// void det_seq(int rem_space, int needed_people, char action, vector<int> acc_seq) {
-//     if (rem_space == 0) {
-//         return;
-//     }
-// }
+void det_seq(int rem_space, int rem_people, bool add_per, string acc, unordered_set<string>& solutions) {
+    if (solutions.size() > 0) {
+        return;
+    }
+    else if (rem_space == 0) {
+        if (rem_people == 0) {
+            solutions.insert(acc);
+        }
+        return;
+    }
+    else if (rem_people == 0) {
+        return;
+    }
+    else if (add_per) {
+        acc.push_back('X');
+        det_seq(max(0, rem_space - 1), max(0, rem_people - 1), false, acc, solutions);
+    }
+    else {
+        acc.push_back('-');
+        det_seq(max(0, rem_space - 1), rem_people, true, acc, solutions);
+
+        string acc2 = acc;
+        acc2.push_back('-');
+        det_seq(max(0, rem_space - 2), rem_people, true, acc2, solutions);
+    }
+}
 
 int main() {
     int people_amt, toilet_amt;
     cin >> people_amt >> toilet_amt;
 
-    // TODO: ...
+    unordered_set<string> solutions;
+    det_seq(toilet_amt - 1, people_amt - 1, false, "X", solutions);
+    det_seq(toilet_amt - 1, people_amt, false, "-", solutions);
+
+    if (solutions.size() == 0) {
+        cout << "*" << endl;
+    }
+    else {
+        string arbitrary_solution = *solutions.begin();
+        cout << arbitrary_solution << endl;
+    }
 }
