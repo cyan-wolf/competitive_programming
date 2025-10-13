@@ -5,7 +5,7 @@
     https://codeforces.com/gym/105505/problem/F
 */
 
-// Wrong Answer 
+// Time Limit Exceeded
 
 #include <iostream>
 #include <string>
@@ -18,10 +18,18 @@ void det_seq(int rem_space, int rem_people, bool add_per, string acc, unordered_
     if (solutions.size() > 0) {
         return;
     }
-    else if (rem_space == 0) {
-        if (rem_people == 0) {
-            solutions.insert(acc);
+    else if (rem_space == 0 && rem_people == 0) {
+        if (acc.size() >= 2) {
+            string end = acc.substr(acc.size() - 2, 2);
+            if (end == "--") {
+                // Discard solutions that end with "--".
+                return;
+            }
         }
+        solutions.insert(acc);
+        return;
+    }
+    else if (rem_space == 0) {
         return;
     }
     else if (rem_people == 0) {
@@ -47,7 +55,7 @@ int main() {
 
     unordered_set<string> solutions;
     det_seq(toilet_amt - 1, people_amt - 1, false, "X", solutions);
-    det_seq(toilet_amt - 1, people_amt, false, "-", solutions);
+    det_seq(toilet_amt - 1, people_amt, true, "-", solutions);
 
     if (solutions.size() == 0) {
         cout << "*" << endl;
