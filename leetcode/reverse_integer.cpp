@@ -18,24 +18,29 @@ using namespace std;
 // Accepted
 
 int solution(int x) {
-    bool is_neg = false;
-
+    // Handle edge case (`INT_MIN` is negative, but it has no inverse).
+    // It so happens that, according to the problem statement, `INT_MIN` should 
+    // return 0, so that's what we do.
     if (x == INT_MIN) {
         return 0;
     }
-    
-    if (x < 0) {
-        x *= -1;
-        is_neg = true;
-    }
-    string s = to_string(x);
 
+    // Make the integer positive if it was negative.
+    bool is_neg = x < 0;
+    if (is_neg) {
+        x *= -1;
+    }
+    // Reverse the digits of the integer as a string.
+    string s = to_string(x);
     reverse(s.begin(), s.end());
 
+    // Re-add the negative sign if the integer was negative.
     if (is_neg) {
         s.insert(0, "-");
     }
 
+    // Try to parse the reversed integer digits as a 32-bit integer, 
+    // if that ends up out of range, return 0 (as stated in the problem statement).
     try {
         int d = stoi(s);
         return d;
