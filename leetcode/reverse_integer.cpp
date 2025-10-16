@@ -9,12 +9,40 @@
  */
 
 #include <iostream>
+#include <string>
+#include <stdexcept>
+#include <algorithm>
 
 using namespace std;
 
+// Accepted
+
 int solution(int x) {
-    // TODO: ...
-    return -1;
+    bool is_neg = false;
+
+    if (x == INT_MIN) {
+        return 0;
+    }
+    
+    if (x < 0) {
+        x *= -1;
+        is_neg = true;
+    }
+    string s = to_string(x);
+
+    reverse(s.begin(), s.end());
+
+    if (is_neg) {
+        s.insert(0, "-");
+    }
+
+    try {
+        int d = stoi(s);
+        return d;
+    }
+    catch (out_of_range& ex) {
+        return 0;
+    }
 }
 
 // Unnecessary class for LeetCode submission.
@@ -28,5 +56,6 @@ public:
 int main() {
     cout << solution(123) << endl;
     cout << solution(-123) << endl;
-    cout << solution(121) << endl;
+    cout << solution(120) << endl;
+    cout << solution(INT_MIN) << endl;
 }
