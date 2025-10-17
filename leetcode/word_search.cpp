@@ -90,5 +90,11 @@ int main() {
     cout << solution(board, "ABCB") << endl;
 
     vector<vector<char>> board2 = {{'a'}};
-    cout << solution(board, "a") << endl; // should be '1', currently prints '0'
+    cout << solution(board2, "a") << endl;
+
+    // terminate called after throwing an instance of 'std::length_error'
+    //   what():  cannot create std::vector larger than max_size()
+    // vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+    vector<vector<char>> board3 = {{"a","b"},{"c","d"}};
+    cout << solution(board3, "abcd") << endl;
 }
