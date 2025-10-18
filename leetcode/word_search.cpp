@@ -8,35 +8,35 @@
  */
 
 #include <iostream>
-// This is a BST, meaning O(log n) inserts and queries.
-// This is being used temporarily since pair is annoying to use in unordered_set.
-#include <set>
 #include <vector>
 #include <tuple>
 
 using namespace std;
 
-// Wrong Answer
+// Accepted
 
 bool in_bounds(int rows, int cols, pair<int, int> pos) {
     return pos.first >= 0 && pos.second >= 0 && pos.first < rows && pos.second < cols;
 }
 
 bool find_word_rec(
-    const vector<vector<char>>& board, 
+    vector<vector<char>>& board, 
     const string& word, 
     pair<int, int> curr_pos, 
-    set<pair<int, int>> visited, 
     int word_idx
 ) {
+    char prev_board_value = board[curr_pos.first][curr_pos.second];
+
     if (word.at(word_idx) != board.at(curr_pos.first).at(curr_pos.second)) {
+        board[curr_pos.first][curr_pos.second] = prev_board_value;
         return false;
     }
     else if (word_idx == word.size() - 1) {
+        board[curr_pos.first][curr_pos.second] = prev_board_value;
         return true;
     }
     else {
-        visited.insert(curr_pos);
+        board[curr_pos.first][curr_pos.second] = '#';
 
         vector<pair<int, int>> nbrs = {
             {curr_pos.first + 1, curr_pos.second},
@@ -46,23 +46,24 @@ bool find_word_rec(
         };
 
         for (auto nbr : nbrs) {
-            if (in_bounds(board.size(), board[0].size(), nbr) && visited.count(nbr) == 0) {
-                bool found = find_word_rec(board, word, nbr, visited, word_idx + 1);
+            if (in_bounds(board.size(), board[0].size(), nbr) && board[nbr.first][nbr.second] != '#') {
+                bool found = find_word_rec(board, word, nbr, word_idx + 1);
                 if (found) {
+                    board[curr_pos.first][curr_pos.second] = prev_board_value;
                     return true;
                 }
             }
         }
+        board[curr_pos.first][curr_pos.second] = prev_board_value;
         return false;
     }
 }
 
-bool find_word(const vector<vector<char>>& board, const string& word, pair<int, int> start_pos) {
-    set<pair<int, int>> visited;
-    return find_word_rec(board, word, start_pos, visited, 0);
+bool find_word(vector<vector<char>>& board, const string& word, pair<int, int> start_pos) {
+    return find_word_rec(board, word, start_pos, 0);
 }
 
-bool solution(const vector<vector<char>>& board, const string& word) {
+bool solution(vector<vector<char>>& board, const string& word) {
     char start = word.at(0);
 
     for (int r = 0; r < board.size(); ++r) {
