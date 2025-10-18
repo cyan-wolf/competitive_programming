@@ -22,34 +22,21 @@ bool in_bounds(int rows, int cols, pair<int, int> pos) {
     return pos.first >= 0 && pos.second >= 0 && pos.first < rows && pos.second < cols;
 }
 
-bool find_word(const vector<vector<char>>& board, const string& word, pair<int, int> start_pos) {
-    set<pair<int, int>> visited;
-    vector<tuple<pair<int, int>, int>> stk = {make_tuple(start_pos, 0)};
-
-    while (stk.size() > 0) {
-        auto curr = stk.back();
-        stk.pop_back();
-
-        auto curr_pos = get<0>(curr);
-        int word_idx = get<1>(curr);
-
+bool find_word_rec(
+    const vector<vector<char>>& board, 
+    const string& word, 
+    pair<int, int> curr_pos, 
+    set<pair<int, int>> visited, 
+    int word_idx
+) {
+    if (word.at(word_idx) != board.at(curr_pos.first).at(curr_pos.second)) {
+        return false;
+    }
+    else if (word_idx == word.size() - 1) {
+        return true;
+    }
+    else {
         visited.insert(curr_pos);
-
-        // cout << "Iteration STK SIZE: " << stk.size() << endl;
-
-        if (word_idx >= word.size()) {
-            return false;
-        }
-
-        if (word.at(word_idx) != board[curr_pos.first][curr_pos.second]) {
-            continue;
-        }
-
-        if (word_idx == word.size() - 1) {
-            return true;
-        }
-
-        // cout << "(" << curr_pos.first << ", " << curr_pos.second << ")" << endl;
 
         vector<pair<int, int>> nbrs = {
             {curr_pos.first + 1, curr_pos.second},
@@ -60,11 +47,19 @@ bool find_word(const vector<vector<char>>& board, const string& word, pair<int, 
 
         for (auto nbr : nbrs) {
             if (in_bounds(board.size(), board[0].size(), nbr) && visited.count(nbr) == 0) {
-                stk.push_back(make_tuple(nbr, word_idx + 1));
+                bool found = find_word_rec(board, word, nbr, visited, word_idx + 1);
+                if (found) {
+                    return true;
+                }
             }
         }
+        return false;
     }
-    return false;
+}
+
+bool find_word(const vector<vector<char>>& board, const string& word, pair<int, int> start_pos) {
+    set<pair<int, int>> visited;
+    return find_word_rec(board, word, start_pos, visited, 0);
 }
 
 bool solution(const vector<vector<char>>& board, const string& word) {
@@ -100,6 +95,6 @@ int main() {
     vector<vector<char>> board2 = {{'a'}};
     cout << solution(board2, "a") << endl; // 1
 
-    vector<vector<char>> board3 = {{'a','b'},{'c','d'}}; // 1 - (wrongly says 0)
-    cout << solution(board3, "abcd") << endl;
+    vector<vector<char>> board3 = {{'a','b'},{'c','d'}}; // 1
+    cout << solution(board3, "acdb") << endl;
 }
