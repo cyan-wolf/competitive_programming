@@ -25,17 +25,14 @@ bool find_word_rec(
     pair<int, int> curr_pos, 
     int word_idx
 ) {
-    char prev_board_value = board[curr_pos.first][curr_pos.second];
-
     if (word.at(word_idx) != board.at(curr_pos.first).at(curr_pos.second)) {
-        board[curr_pos.first][curr_pos.second] = prev_board_value;
         return false;
     }
     else if (word_idx == word.size() - 1) {
-        board[curr_pos.first][curr_pos.second] = prev_board_value;
         return true;
     }
     else {
+        char prev_board_value = board[curr_pos.first][curr_pos.second];
         board[curr_pos.first][curr_pos.second] = '#';
 
         vector<pair<int, int>> nbrs = {
