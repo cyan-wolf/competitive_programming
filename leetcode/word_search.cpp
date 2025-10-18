@@ -35,6 +35,12 @@ bool find_word(const vector<vector<char>>& board, const string& word, pair<int, 
 
         visited.insert(curr_pos);
 
+        // cout << "Iteration STK SIZE: " << stk.size() << endl;
+
+        if (word_idx >= word.size()) {
+            return false;
+        }
+
         if (word.at(word_idx) != board[curr_pos.first][curr_pos.second]) {
             continue;
         }
@@ -42,6 +48,8 @@ bool find_word(const vector<vector<char>>& board, const string& word, pair<int, 
         if (word_idx == word.size() - 1) {
             return true;
         }
+
+        // cout << "(" << curr_pos.first << ", " << curr_pos.second << ")" << endl;
 
         vector<pair<int, int>> nbrs = {
             {curr_pos.first + 1, curr_pos.second},
@@ -85,16 +93,13 @@ public:
 
 int main() {
     vector<vector<char>> board = {{'A','B','C','E'},{'S','F','C','S'},{'A','D','E','E'}};
-    cout << solution(board, "ABCCED") << endl;
-    cout << solution(board, "SEE") << endl;
-    cout << solution(board, "ABCB") << endl;
+    cout << solution(board, "ABCCED") << endl; // 1
+    cout << solution(board, "SEE") << endl; // 1
+    cout << solution(board, "ABCB") << endl; // 0
 
     vector<vector<char>> board2 = {{'a'}};
-    cout << solution(board2, "a") << endl;
+    cout << solution(board2, "a") << endl; // 1
 
-    // terminate called after throwing an instance of 'std::length_error'
-    //   what():  cannot create std::vector larger than max_size()
-    // vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
-    vector<vector<char>> board3 = {{"a","b"},{"c","d"}};
+    vector<vector<char>> board3 = {{'a','b'},{'c','d'}}; // 1 - (wrongly says 0)
     cout << solution(board3, "abcd") << endl;
 }
