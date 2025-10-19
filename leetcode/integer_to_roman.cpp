@@ -36,6 +36,8 @@
 
 using namespace std;
 
+// Accepted
+
 string solution(int num) {
     string acc;
     unordered_map<int, string> table;
@@ -44,6 +46,7 @@ string solution(int num) {
     table[100] = "C";
     table[50] = "L";
     table[10] = "X";
+    table[5] = "V";
     table[1] = "I";
 
     while (num > 0) {
@@ -51,8 +54,6 @@ string solution(int num) {
             int power = pow(10, place);
             if (num >= power) {
                 int curr_digit = num / power;
-
-                cout << curr_digit << " " << power << endl; 
 
                 if (curr_digit == 4) {
                     acc.append(table.at(power));
@@ -94,9 +95,6 @@ public:
 int main() {
     cout << solution(1000) << endl;     // M
     cout << solution(3749) << endl;     // MMMDCCXLIX
-
-    // These cases currently go out of bounds [!].
-    // vvvvvvvvvvvvvvvvvvvvvvvvv
     cout << solution(58) << endl;       // LVIII
     cout << solution(1994) << endl;     // MCMXCIV
 }
