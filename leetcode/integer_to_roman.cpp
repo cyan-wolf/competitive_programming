@@ -30,11 +30,58 @@
  */
 
 #include <iostream>
+#include <string>
+#include <unordered_map>
+#include <cmath>
 
 using namespace std;
 
 string solution(int num) {
-    return "TODO";
+    string acc;
+    unordered_map<int, string> table;
+    table[1000] = "M";
+    table[500] = "D";
+    table[100] = "C";
+    table[50] = "L";
+    table[10] = "X";
+    table[1] = "I";
+
+    while (num > 0) {
+        for (int place = 3; place >= 0; --place) {
+            int power = pow(10, place);
+            if (num >= power) {
+                int curr_digit = num / power;
+
+                cout << curr_digit << " " << power << endl; 
+
+                if (curr_digit == 4) {
+                    acc.append(table.at(power));
+                    acc.append(table.at(5 * power));
+                }
+                else if (curr_digit == 9) {
+                    acc.append(table.at(power));
+                    acc.append(table.at(power * 10));
+                }
+                else if (curr_digit < 4) {
+                    for (int _i = 0; _i < curr_digit; ++_i) {
+                        acc.append(table.at(power));
+                    }
+                }
+                else if (curr_digit > 4) {
+                    acc.append(table.at(5 * power));
+                    curr_digit -= 5;
+
+                    for (int _i = 0; _i < curr_digit; ++_i) {
+                        acc.append(table.at(power));
+                    }
+                }
+
+                num %= power;
+            }
+        }
+    }
+
+    return acc;
 }
 
 class Solution {
@@ -45,7 +92,11 @@ public:
 };
 
 int main() {
+    cout << solution(1000) << endl;     // M
     cout << solution(3749) << endl;     // MMMDCCXLIX
+
+    // These cases currently go out of bounds [!].
+    // vvvvvvvvvvvvvvvvvvvvvvvvv
     cout << solution(58) << endl;       // LVIII
     cout << solution(1994) << endl;     // MCMXCIV
 }
