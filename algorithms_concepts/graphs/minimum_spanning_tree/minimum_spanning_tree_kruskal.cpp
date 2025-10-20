@@ -8,7 +8,7 @@
 
 #include <iostream>
 
-// TODO: everything
+// TODO: everything (a DSU is needed)
 
 int main() {
 
