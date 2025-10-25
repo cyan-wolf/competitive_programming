@@ -3,30 +3,33 @@
  */
 
 #include <iostream>
+#include <unordered_map>
+#include <stdexcept>
+
 #include <vector>
 
 using namespace std;
 
+template<class T>
 class DisjoinSetUnion {
 private:
-    vector<int> parent;
-    vector<int> rank;
+    unordered_map<T, T> parent;
+    unordered_map<T, int> rank;
 
 public:
-    DisjoinSetUnion(int capacity) {
-        parent.resize(capacity);
-        rank.resize(capacity, 0);
-
-        // The numbers from 0 to capacity - 1 are 
-        // elements of the DSU. All elements start out in 
-        // their own disjoint set (or forest).
-        for (int i = 0; i < capacity; ++i) {
-            parent[i] = i;
+    void add(T element) {
+        if (parent.count(element) == 0) {
+            parent[element] = element;
+            rank[element] = 0;
         }
     }
 
     // Returns the representative of the set containing i.
-    int find(int i) {
+    T find(T i) {
+        if (parent.count(i) == 0) {
+            throw out_of_range("could not find given element");
+        }
+
         // If `i` is its own parent, that means that it is 
         // the representative of the set that it is in.
         if (parent[i] == i) {
@@ -40,9 +43,9 @@ public:
     }
 
     // Merges the sets containing `i` and `j` using 'Union by Rank'.
-    void unite(int i, int j) {
-        int root_i = find(i);
-        int root_j = find(j);
+    void unite(T i, T j) {
+        T root_i = find(i);
+        T root_j = find(j);
 
         // Only perform anything if `i` and `j` were in different sets (hence had 
         // different roots (representatives)).
@@ -63,30 +66,44 @@ public:
             }
         }
     }
+
+    // Helper function.
+    bool is_same_set(T i, T j) {
+        return find(i) == find(j);
+    }
 };
 
-void check_all_roots(DisjoinSetUnion &dsu, int dsu_capacity) {
-    for (int i = 0; i < dsu_capacity; ++i) {
-        cout << i << " has root " << dsu.find(i) << endl;
+template<class T>
+void check_all_roots(DisjoinSetUnion<T> &dsu, const vector<T> &elems) {
+    for (auto& elem : elems) {
+        cout << elem << " has root " << dsu.find(elem) << endl;
     }
     cout << endl;
 }
 
 // Sample tests.
 int main() {
-    int dsu_capacity = 6;
+    vector<char> elems = {'a', 'b', 'c', 'd', 'e', 'f'};
+    DisjoinSetUnion<char> dsu;
 
-    DisjoinSetUnion dsu(dsu_capacity);
+    for (char elem : elems) {
+        dsu.add(elem);
+    }
 
-    check_all_roots(dsu, dsu_capacity);
+    check_all_roots(dsu, elems);
 
-    // result: {0, 2, 4, 5}
-    dsu.unite(0, 2);
-    dsu.unite(4, 5);
-    dsu.unite(2, 5);
+    // result: {'a', 'c', 'e', 'f'}
+    dsu.unite('a', 'c');
+    dsu.unite('e', 'f');
+    dsu.unite('c', 'f');
 
-    // result: {1, 3}
-    dsu.unite(1, 3);
+    // result: {'b', 'd'}
+    dsu.unite('b', 'd');
 
-    check_all_roots(dsu, dsu_capacity);
+    check_all_roots(dsu, elems);
+
+    cout << dsu.is_same_set('d', 'b') << endl; // 1 (true)
+    cout << dsu.is_same_set('d', 'a') << endl; // 0 (false)
+    cout << dsu.is_same_set('a', 'b') << endl; // 0 (false)
+    cout << dsu.is_same_set('a', 'f') << endl; // 1 (true)
 }
