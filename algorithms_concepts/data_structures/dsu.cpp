@@ -7,13 +7,13 @@
 
 using namespace std;
 
-class DisjoinSetUnion {
+class DisjointSetUnion {
 private:
     vector<int> parent;
     vector<int> rank;
 
 public:
-    DisjoinSetUnion(int capacity) {
+    DisjointSetUnion(int capacity) {
         parent.resize(capacity);
         rank.resize(capacity, 0);
 
@@ -63,9 +63,13 @@ public:
             }
         }
     }
+
+    bool is_same_set(int i, int j) {
+        return find(i) == find(j);
+    }
 };
 
-void check_all_roots(DisjoinSetUnion &dsu, int dsu_capacity) {
+void check_all_roots(DisjointSetUnion &dsu, int dsu_capacity) {
     for (int i = 0; i < dsu_capacity; ++i) {
         cout << i << " has root " << dsu.find(i) << endl;
     }
@@ -76,7 +80,7 @@ void check_all_roots(DisjoinSetUnion &dsu, int dsu_capacity) {
 int main() {
     int dsu_capacity = 6;
 
-    DisjoinSetUnion dsu(dsu_capacity);
+    DisjointSetUnion dsu(dsu_capacity);
 
     check_all_roots(dsu, dsu_capacity);
 

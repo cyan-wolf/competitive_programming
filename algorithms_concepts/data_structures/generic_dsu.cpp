@@ -11,7 +11,7 @@
 using namespace std;
 
 template<class T>
-class DisjoinSetUnion {
+class DisjointSetUnion {
 private:
     unordered_map<T, T> parent;
     unordered_map<T, int> rank;
@@ -74,7 +74,7 @@ public:
 };
 
 template<class T>
-void check_all_roots(DisjoinSetUnion<T> &dsu, const vector<T> &elems) {
+void check_all_roots(DisjointSetUnion<T> &dsu, const vector<T> &elems) {
     for (auto& elem : elems) {
         cout << elem << " has root " << dsu.find(elem) << endl;
     }
@@ -84,7 +84,7 @@ void check_all_roots(DisjoinSetUnion<T> &dsu, const vector<T> &elems) {
 // Sample tests.
 int main() {
     vector<char> elems = {'a', 'b', 'c', 'd', 'e', 'f'};
-    DisjoinSetUnion<char> dsu;
+    DisjointSetUnion<char> dsu;
 
     for (char elem : elems) {
         dsu.add(elem);
