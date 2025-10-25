@@ -91,6 +91,7 @@ bool compare_by_weight(const Edge& a, const Edge& b) {
 
 // ========== Kruskal's Algorithm ==========
 
+// O(E log(E)), where E is the size of the edge list.
 vector<Edge> mst_kruskal(vector<Edge>& edges, int num_vertices) {
     // Sort the edge list by weight.
     sort(edges.begin(), edges.end(), compare_by_weight);
