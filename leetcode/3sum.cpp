@@ -12,7 +12,7 @@
 #include <vector>
 #include <unordered_map>
 #include <algorithm>
-#include <set>
+#include <set> // increases complexity due to O(log N) operations (instead of O(1))
 
 using namespace std;
 
@@ -20,6 +20,11 @@ vector<vector<int>> solution(const vector<int>& nums) {
     unordered_map<int, int> num_positions;
     set<vector<int>> triplets;
 
+    // Cache the positions in a hash map.
+    // This allows easy retrieval of a number and its index.
+    // Note that this removes duplicates, but this doesn't matter since at the end 
+    // the triplets have to be unique anyways, so multiple positions for the same 
+    // number are not considered for the retrieval stage.
     for (int i = 0; i < nums.size(); ++i) {
         num_positions[nums[i]] = i;
     }
@@ -29,15 +34,20 @@ vector<vector<int>> solution(const vector<int>& nums) {
             if (i == j) {
                 continue;
             }
+            // Find the number that makes the partial sum be 0.
             auto it = num_positions.find(-(nums[i] + nums[j]));
 
             if (it != num_positions.end() && it->second > j) {
                 vector<int> triplet = {nums[i], nums[j], it->first};
+                // Makes the representation of the triplet unique.
                 sort(triplet.begin(), triplet.end());
+                // Takes case of duplicates since `triplets` is a map.
+                // NOTE: O(log N) since `map` is used instead of `unordered_map`.
                 triplets.insert(triplet);
             }
         }
     }
+    // Turn the map into a vector as the problem statement requires.
     vector<vector<int>> triplets_vec;
     for (auto t : triplets) {
         triplets_vec.push_back(t);
