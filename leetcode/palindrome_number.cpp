@@ -20,21 +20,19 @@ bool solution(int x) {
         return x == 0;
     }
 
-    // Collect all the number's digits.
-    vector<int> digits;
+    // Collect all the number's digits in reverse order.
+    int x_copy = x;
 
-    while (x != 0) {
-        digits.push_back(x % 10);
-        x /= 10;
+    // Use `long long` to avoid overflow.
+    long long rev_x = 0;
+
+    while (x_copy != 0) {
+        rev_x = rev_x * 10 + (x_copy % 10);
+        x_copy /= 10;
     }
 
-    // Check if the list of digits is a palindrome.
-    for (int i = 0; i < digits.size() / 2; ++i) {
-        if (digits[i] != digits[digits.size() - 1 - i]) {
-            return false;
-        }
-    }
-    return true;
+    // Check if the integer is the same as its reverse..
+    return x == rev_x;
 }
 
 class Solution {
