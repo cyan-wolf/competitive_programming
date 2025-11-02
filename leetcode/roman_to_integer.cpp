@@ -41,8 +41,11 @@ int solution(string s) {
     
     while (i < s.size()) {
         char curr = s[i];
+        // Returns a sentinel if `i + 1` is out of bounds. Does not 
+        // interfere with the if statements below.
         char next = safe_get(s, i + 1);
 
+        // If statements handling every possible combination of characters.
         if (curr == 'I') {
             if (next == 'V') {
                 acc += 4;
