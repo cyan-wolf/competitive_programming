@@ -16,16 +16,36 @@
 #include <vector>
 #include <algorithm>
 #include <unordered_map>
-#include <set>
+#include <unordered_set>
 
 using namespace std;
+
+struct VectorKey {
+    vector<int> data;
+
+    bool operator==(const VectorKey& other) const {
+        return data == other.data;
+    }
+};
+
+struct VectorHash {
+    size_t operator()(const VectorKey& k) const {
+        size_t seed = k.data.size();
+        hash<int> hasher;
+
+        for (const int& n : k.data) {
+            seed ^= hasher(n) + 0x9e3779b9 + (seed << 6) + (seed >> 2);
+        }
+        return seed;
+    }
+};
 
 vector<vector<int>> solution(vector<int>& nums, int target) {
     unordered_map<int, int> seen;
     for (int i = 0; i < nums.size(); ++i) {
         seen[nums[i]] = i;
     }
-    set<vector<int>> solutions;
+    unordered_set<VectorKey, VectorHash> solutions;
 
     for (int i = 0; i < nums.size(); ++i) {
         for (int j = i + 1; j < nums.size(); ++j) {
@@ -42,7 +62,7 @@ vector<vector<int>> solution(vector<int>& nums, int target) {
                     vector<int> quadruplet = {nums[i], nums[j], nums[k], it->first};
                     sort(quadruplet.begin(), quadruplet.end());
 
-                    solutions.insert(quadruplet);
+                    solutions.insert({quadruplet});
                 }
             }
         }
@@ -50,7 +70,7 @@ vector<vector<int>> solution(vector<int>& nums, int target) {
 
     vector<vector<int>> solutions_vec;
     for (auto q : solutions) {
-        solutions_vec.push_back(q);
+        solutions_vec.push_back(q.data);
     }
     return solutions_vec;
 }
