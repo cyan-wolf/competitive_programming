@@ -25,81 +25,33 @@
 
 #include <iostream>
 #include <string>
+#include <unordered_map>
 
 using namespace std;
 
-char safe_get(const string& s, int i) {
-    if (i >= s.size()) {
-        return 'Z'; // sentinel
-    }
-    return s[i];
-}
-
 int solution(string s) {
-    int i = 0;
-    int acc = 0;
-    
-    while (i < s.size()) {
-        char curr = s[i];
-        // Returns a sentinel if `i + 1` is out of bounds. Does not 
-        // interfere with the if statements below.
-        char next = safe_get(s, i + 1);
+    unordered_map<char, int> values;
+    values['I'] = 1;
+    values['V'] = 5;
+    values['X'] = 10;
+    values['L'] = 50;
+    values['C'] = 100;
+    values['D'] = 500;
+    values['M'] = 1000;
 
-        // If statements handling every possible combination of characters.
-        if (curr == 'I') {
-            if (next == 'V') {
-                acc += 4;
-                i += 2;
-            }
-            else if (next == 'X') {
-                acc += 9;
-                i += 2;
-            }
-            else {
-                acc += 1;
-                i++;
-            }
+    int acc = 0;
+    char prev = 'Z'; // sentinel for representing that there is no previous character
+
+    for (int i = s.size() - 1; i >= 0; --i) {
+        // If the current character is less then the previous one, then we should subtract its value.
+        if (prev != 'Z' && values[s[i]] < values[prev]) {
+            acc -= values[s[i]];
         }
-        else if (curr == 'X') {
-            if (next == 'L') {
-                acc += 40;
-                i += 2;
-            }
-            else if (next == 'C') {
-                acc += 90;
-                i += 2;
-            }
-            else {
-                acc += 10;
-                i++;
-            }
-        }
-        else if (curr == 'C') {
-            if (next == 'D') {
-                acc += 400;
-                i += 2;
-            }
-            else if (next == 'M') {
-                acc += 900;
-                i += 2;
-            }
-            else {
-                acc += 100;
-                i++;
-            }
-        }
+        // Otherwise, we apply normal logic.
         else {
-            if (curr == 'V') {
-                acc += 5;
-            } else if (curr == 'L') {
-                acc += 50;
-            } else if (curr == 'D') {
-                acc += 500;
-            } else {
-                acc += 1000;
-            }
-            i++;
+            acc += values[s[i]];
         }
+        prev = s[i];
     }
     return acc;
 }
