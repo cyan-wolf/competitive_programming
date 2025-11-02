@@ -10,7 +10,7 @@
  * 
  */
 
-// Runtime Error: Signed Integer Overflow on test case #283
+// Accepted
 
 #include <iostream>
 #include <vector>
@@ -30,10 +30,12 @@ vector<vector<int>> solution(vector<int>& nums, int target) {
     for (int i = 0; i < nums.size(); ++i) {
         for (int j = i + 1; j < nums.size(); ++j) {
             for (int k = j + 1; k < nums.size(); ++k) {
-                if (i == j || j == k || i == k) {
+                // The `long long` casting is to avoid overflow.
+                long long needed = (long long)target - (long long)nums[i] - (long long)nums[j] - (long long)nums[k];
+
+                if (needed > INT_MAX || needed < INT_MIN) {
                     continue;
                 }
-                int needed = target - nums[i] - nums[j] - nums[k];
 
                 auto it = seen.find(needed);
                 if (it != seen.end() && it->second > k) {
