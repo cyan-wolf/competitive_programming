@@ -9,6 +9,8 @@
  * You may assume that each input would have exactly one solution.
  */
 
+// Accepted
+
 #include <iostream>
 #include <vector>
 #include <cmath>
