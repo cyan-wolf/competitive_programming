@@ -11,7 +11,7 @@
  * Notice that you may not slant the container.
  */
 
-// Time Limit Exceeded
+// Accepted
 
 #include <iostream>
 #include <vector>
@@ -20,17 +20,27 @@
 using namespace std;
 
 int solution(vector<int>& height) {
+    int lptr = 0;
+    int rptr = height.size() - 1;
     int max_area = 0;
 
-    for (int i = 0; i < height.size(); ++i) {
-        for (int j = i; j < height.size(); ++j) {
-            int dx = j - i;
-            int dy = min(height[i], height[j]);
+    while (lptr <= rptr) {
+        int dx = rptr - lptr;
+        int dy = min(height[lptr], height[rptr]);
+        int area = dx * dy;
 
-            int area = dx * dy;
-            if (area > max_area) {
-                max_area = area;
-            }
+        // Keep updating the max area.
+        if (area > max_area) {
+            max_area = area;
+        }
+
+        // Always move the smallest container edge (move the left one
+        // as a tie-breaker).
+        if (height.at(lptr) < height.at(rptr)) {
+            lptr++;
+        }
+        else {
+            rptr--;
         }
     }
     return max_area;
@@ -44,9 +54,12 @@ public:
 };
 
 int main() {
-    vector<int> height = {1,8,6,2,5,4,8,3,7};
+    vector<int> height = {1,8,6,2,5,4,8,3,7};   // 49
     cout << solution(height) << endl;
 
-    height = {1,1};
+    height = {1,1};                             // 1
+    cout << solution(height) << endl;
+
+    height = {2,3,4,5,18,17,6};                 // 17
     cout << solution(height) << endl;
 }
